@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+   <link rel="icon" href="src/hero section.jpeg" type="image/jpeg">
+    <meta name="theme-color" content="#D4A574">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — Notre boutique</title>
+  <meta name="description" content="Contactez-nous pour toute demande ou récupération de marchandise." />
+  <style>
+    :root{
+      --bg:#f4cda7; /* beige — légèrement plus foncé */
+      --card:#ffffff;
+      --primary:#6F4E37; /* marron */
+      --primary-dark:#5A3D2B; /* marron foncé (boutons) */
+      --secondary:#F5F0E6; /* beige */
+      --muted:#7A6F66; /* couleur muted assortie */
+      --danger:#ef4444;
+      --success:#10b981;
+      --radius:12px;
+      --max-width:720px;
+      color-scheme: light;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:#2b2b2b; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      display:flex; align-items:center; justify-content:center; padding:48px 16px;
+    }
+
+    .container{
+      width:100%; max-width:var(--max-width); background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.95)); border-radius:var(--radius); box-shadow:0 8px 30px rgba(16,24,40,0.08); overflow:hidden;
+      display:grid; grid-template-columns: 1fr; gap:0;
+    }
+
+    header{
+      padding:28px 32px; background:linear-gradient(90deg, rgba(111,78,55,0.06), rgba(245,240,230,0.02)); border-bottom:1px solid rgba(15,23,42,0.03);
+    }
+    header h1{margin:0;font-size:20px;letter-spacing:-0.2px}
+    header p{margin:6px 0 0;color:var(--muted);font-size:14px}
+
+    main{padding:28px 32px; display:flex; gap:32px; align-items:stretch}
+
+    form{flex:1; display:flex; flex-direction:column; gap:14px}
+    .field{display:flex; flex-direction:column; gap:6px}
+    label{font-size:13px;color:#0b1220}
+    input[type="email"], textarea{
+      padding:12px 14px; border-radius:10px; border:1px solid #e6e9f2; background:var(--card); font-size:14px; resize:vertical; min-height:44px; transition:box-shadow .18s ease, border-color .12s ease, transform .08s ease;
+    }
+    input[type="email"]:focus, textarea:focus{outline:none; border-color:var(--primary); box-shadow:0 6px 20px rgba(111,78,55,0.08); transform:translateY(-1px)}
+    input[type="email"]::placeholder, textarea::placeholder{color:#9a9087} /* warm muted */
+
+    .meta{display:flex; align-items:center; justify-content:space-between; gap:12px; color:var(--muted); font-size:13px}
+    .counter{font-variant-numeric: tabular-nums}
+
+    .errors{color:var(--danger); font-size:13px; min-height:18px}
+
+    .actions{display:flex; align-items:center; gap:12px; margin-top:6px}
+    button[type="submit"]{
+      background:var(--primary-dark); color:white; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:10px; box-shadow:0 6px 22px rgba(111,78,55,0.14); transition:transform .12s ease, box-shadow .12s ease, background-color .12s ease, color .12s ease; will-change:transform;
+    }
+    button[type="submit"]:hover{transform:translateY(-2px); background:var(--secondary); color:var(--primary-dark); box-shadow:0 10px 30px rgba(111,78,55,0.12)}
+    button[type="submit"]:active{transform:scale(.99)}
+
+    .info{width:280px; padding:12px 16px; background:linear-gradient(180deg, rgba(16,24,40,0.02), rgba(255,255,255,0.01)); border-radius:10px; border:1px solid rgba(15,23,42,0.03); color:var(--muted); font-size:13px}
+    .info a{color:var(--primary-dark); text-decoration:none}
+    .info a:hover{color:var(--primary); text-decoration:underline}
+
+    .success-card{display:none; align-items:flex-start; gap:12px; flex-direction:column; padding:16px; border-radius:10px; border:1px solid rgba(111,78,55,0.08); background:linear-gradient(180deg, rgba(245,240,230,0.03), rgba(255,255,255,0.01)); color:var(--primary-dark)}
+    .success-card.show{display:flex}
+
+    @media (max-width:860px){
+      main{flex-direction:column}
+      .info{width:100%}
+    }
+
+    /* small accessibility niceties */
+    .sr-only{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+  </style>
+</head>
+<body>
+  <div class="container" role="region" aria-labelledby="contact-title">
+    <header>
+      <h1 id="contact-title">Contactez-nous</h1>
+      <p>Une question sur une commande ou la récupération d'une commonde ? Envoyez-nous un message ci-dessous.</p>
+    </header>
+    <main>
+      <form id="contactForm" novalidate>
+        <div class="field">
+          <label for="email">Adresse e-mail <span aria-hidden="true">*</span></label>
+          <input id="email" name="email" type="email" placeholder="votre.email@example.com" required aria-required="true" autocomplete="email" />
+          <div id="emailError" class="errors" aria-live="polite"></div>
+        </div>
+
+        <div class="field">
+          <label for="message">Message / demande <span aria-hidden="true">*</span></label>
+          <textarea id="message" name="message" placeholder="Décrivez votre demande (max 1000 caractères)" rows="6" minlength="1" maxlength="1000" required aria-required="true"></textarea>
+          <div class="meta">
+            <div id="messageError" class="errors" aria-live="polite"></div>
+            <div class="counter"><span id="charCount">0</span> / 1000</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="sendBtn" type="submit" aria-label="Envoyer le message">Envoyer</button>
+          <div id="submitFeedback" class="sr-only" aria-live="polite"></div>
+        </div>
+        
+
+        <div id="success" class="success-card" role="status" aria-live="polite">
+          <strong id="successTitle">Votre demande a été envoyée avec succès.</strong>
+          <div id="successDetail" style="color:var(--muted);font-size:14px"></div>
+        </div>
+      </form>
+
+      <aside class="info" aria-label="Informations">
+        <strong>Infos utiles</strong>
+        <p style="margin-top:8px">La récupération se fera à l'adresse de notre boutique. La date estimée ci-dessous est une estimation générée automatiquement (jour d'aujourd'hui + 3 jours ouvrés).</p>
+        <p style="margin-top:8px;color:var(--muted)">Nous enverrons un email de confirmation après la soumission.</p>
+        <div style="margin-top:12px;color:var(--muted);font-size:13px">Téléphone: <a href="tel:+33123456789">01 23 45 67 89</a></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // Contact form handling (vanilla JS)
+    (function(){
+     const form = document.getElementById('contactForm');
+      const email = document.getElementById('email');
+      const message = document.getElementById('message');
+      const charCount = document.getElementById('charCount');
+      const emailError = document.getElementById('emailError');
+      const messageError = document.getElementById('messageError');
+      const sendBtn = document.getElementById('sendBtn');
+      const successCard = document.getElementById('success');
+      const successDetail = document.getElementById('successDetail');
+      const submitFeedback = document.getElementById('submitFeedback');
+
+      // update character count at load and on input
+      function updateCount(){
+        const len = message.value.length;
+        charCount.textContent = len;
+        if(len === 1000){
+          messageError.textContent = 'Vous avez atteint la limite de 1000 caractères.';
+        } else {
+          messageError.textContent = '';
+        }
+      }
+
+      // simple email validation
+      function validateEmail(){
+        if(!email.value){
+          emailError.textContent = 'Veuillez renseigner votre adresse e-mail.';
+          return false;
+        }
+        // HTML5 will perform basic validation but we add a pattern check for clarity
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!re.test(email.value)){
+          emailError.textContent = 'Veuillez saisir une adresse e-mail valide.';
+          return false;
+        }
+        emailError.textContent = '';
+        return true;
+      }
+
+      function validateMessage(){
+        const val = message.value.trim();
+        if(val.length < 1){
+          messageError.textContent = 'Le message ne peut pas être vide.';
+          return false;
+        }
+        if(val.length > 1000){
+          messageError.textContent = 'Le message dépasse la limite autorisée de 1000 caractères.';
+          return false;
+        }
+        messageError.textContent = '';
+        return true;
+      }
+
+      // estimated pickup date: today + 3 days (non-business day logic omitted for simplicity)
+      function estimatedPickupDate(offsetDays=3){
+        const d = new Date();
+        d.setDate(d.getDate() + offsetDays);
+        // format date in French locale short style
+        return d.toLocaleDateString('fr-FR', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+      }
+
+      // prevent exceeding maxlength by pasting large content
+      message.addEventListener('paste', function(e){
+        const paste = (e.clipboardData || window.clipboardData).getData('text');
+        if(message.value.length + paste.length > 1000){
+          e.preventDefault();
+          const allowed = 1000 - message.value.length;
+          if(allowed > 0){
+            const truncated = paste.slice(0, allowed);
+            // insert at caret position
+            const start = message.selectionStart;
+            const end = message.selectionEnd;
+            const newValue = message.value.slice(0,start) + truncated + message.value.slice(end);
+            message.value = newValue;
+            updateCount();
+          }
+        }
+      });
+
+      message.addEventListener('input', updateCount);
+      email.addEventListener('input', function(){ emailError.textContent = ''; });
+
+      // subtle button animation on click
+      sendBtn.addEventListener('click', function(){
+        sendBtn.animate([
+          { transform: 'scale(1)' },
+          { transform: 'scale(0.98)' },
+          { transform: 'scale(1)' }
+        ], { duration: 250, easing: 'ease-out' });
+      });
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        // clear previous feedback
+        submitFeedback.textContent = '';
+
+        const okEmail = validateEmail();
+        const okMessage = validateMessage();
+        updateCount();
+
+        if(!okEmail || !okMessage){
+          submitFeedback.textContent = 'Veuillez corriger les erreurs ci-dessus.';
+          return;
+        }
+
+        // simulate sending (fake delay)
+        sendBtn.disabled = true;
+        sendBtn.setAttribute('aria-busy','true');
+        sendBtn.style.opacity = '0.9';
+
+        setTimeout(function(){
+          // simulated success
+          const pickup = estimatedPickupDate(3);
+          successDetail.innerHTML = `Un email de confirmation a été envoyé à <strong>${escapeHtml(email.value)}</strong>.<br>Date estimée de récupération: <strong>${pickup}</strong>`;
+          successCard.classList.add('show');
+          submitFeedback.textContent = 'Votre demande a été envoyée avec succès.';
+
+          // reset form (keep success visible)
+          form.reset();
+          updateCount();
+
+          sendBtn.disabled = false;
+          sendBtn.removeAttribute('aria-busy');
+          sendBtn.style.opacity = '';
+
+        }, 900);
+      });
+
+      // small helper to avoid XSS in output
+      function escapeHtml(unsafe){
+        return unsafe.replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[m]; });
+      }
+
+      // initial count
+      updateCount();
+    })();
+  </script>
+</body>
+</html>
